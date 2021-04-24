@@ -1,8 +1,8 @@
 const { default: axios } = require("axios");
 const { auth, URL } = require("./utils/constants");
 
-module.exports.getTickets = async function() {
-  console.log("getTickets");
+module.exports.getTickets = async function(source, args) {
+  const { filter } = args;
   try {
     const response = await axios({
       method: "GET",
@@ -19,11 +19,13 @@ module.exports.getTickets = async function() {
       return [];
     }
   } catch (e) {
+      console.log(e);
     return [];
   }
 
   //TODO: Please let @madhavanmalolan know what schema you want to respond with. For now only added ticketId, title and upvotes
 };
+
 /*async function getTickets(source, args, context) {
     return [{
         ticketId: "Sample Ticket Id",
@@ -63,3 +65,11 @@ module.exports.downvoteTicket = async function(ticketId) {
   console.log("downvoteTicket", ticketId);
   return { status: "200", message: "OK" };
 };
+
+module.exports.createTicket = async function(
+
+){
+  console.log("Create User stub");
+  return { status: "200", message: "OK" };
+
+}

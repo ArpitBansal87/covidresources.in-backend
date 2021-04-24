@@ -20,7 +20,7 @@ const {
 	toGlobalId,
 } =require('graphql-relay');
 
-const { updateTicket, upvoteTicket, downvoteTicket } = require('./resolver');
+const { updateTicket, upvoteTicket, downvoteTicket, createTicket } = require('./resolver');
 
 const UpdateTicketMutation = mutationWithClientMutationId({
     name: 'UpdateTicketMutation',
@@ -63,7 +63,54 @@ const DownvoteTicketMutation = mutationWithClientMutationId({
     mutateAndGetPayload: ({ ticketId }) => downvoteTicket( ticketId )
 });
 
+const CreateTicketMutation = mutationWithClientMutationId({
+    name: 'CreateTicketMutation',
+    description: "Create a ticket mutation",
+    inputFields : {
+        state: { 
+			type: GraphQLString
+		},
+		city: { 
+			type: GraphQLString
+		},
+		pincode: { 
+			type: GraphQLString
+		},
+		address: { 
+			type: GraphQLString
+		},
+		supplierDonorName: { 
+			type: GraphQLString
+		},
+		supplierDonorContactNumber: { 
+			type: GraphQLString
+		},
+		resourceType: { 
+			type: GraphQLString
+		},
+		resourceName: { 
+			type: GraphQLString
+		},
+		costPerUnit: { 
+			type: GraphQLString
+		},
+		availableUnits: { 
+			type: GraphQLString
+		},
+		bloodGroup: { 
+			type: GraphQLString
+		},
+    },
+    outputFields: {
+        status : { type: GraphQLString },
+        message: { type: GraphQLString }
+    },
+    mutateAndGetPayload: (source, args, context) => createTicket( source, args, context )
+});
+
+
 
 module.exports.UpdateTicketMutation = UpdateTicketMutation;
 module.exports.UpvoteTicketMutation = UpvoteTicketMutation;
 module.exports.DownvoteTicketMutation = DownvoteTicketMutation;
+module.exports.CreateTicketMutation = CreateTicketMutation;

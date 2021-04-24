@@ -20,7 +20,7 @@ const {
 		toGlobalId,
 } =require('graphql-relay');
 
-const { UpdateTicketMutation, UpvoteTicketMutation, DownvoteTicketMutation } = require('./models/mutation_ticket');
+const { UpdateTicketMutation, UpvoteTicketMutation, DownvoteTicketMutation ,CreateTicketMutation } = require('./models/mutation_ticket');
 const { GraphQLWorkspace } = require('./models/node_workspace');
 const { getWorkspace } = require('./models/resolver');
 
@@ -44,7 +44,8 @@ const GraphQLMutationRoot = new GraphQLObjectType({
 	fields: {
 		upvoteTicket : UpvoteTicketMutation,
 		downvoteTicket : DownvoteTicketMutation,
-		updateTicket : UpdateTicketMutation 
+		updateTicket : UpdateTicketMutation,
+		createTicket : CreateTicketMutation
 	}
 })
 

@@ -41,7 +41,7 @@ const GraphQLWorkspace = new GraphQLObjectType({
 				...connectionArgs
 			}, 
 			resolve: (source, { ...args }, context) => {
-				return connectionFromPromisedArray(getTickets(), args);
+				return connectionFromPromisedArray(getTickets( source, args ), args);
 			}
 		}
 	}
