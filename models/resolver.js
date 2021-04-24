@@ -3,28 +3,24 @@ const { auth, URL } = require("./utils/constants");
 
 module.exports.getTickets = async function() {
   console.log("getTickets");
-  axios({
-    method: "GET",
-    url: URL,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: auth,
-    },
-  })
-    .then((response) => {
-      const { data, isAxiosError, status, code } = response;
-      if (!isAxiosError) {
-        return { status, data };
-      } else {
-        return {
-          status: "500",
-          error: code,
-        };
-      }
-    })
-    .catch((err) => {
-      return { status: "500", message: err };
+  try {
+    const response = await axios({
+      method: "GET",
+      url: URL,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: auth,
+      },
     });
+    const { data, isAxiosError } = response;
+    if (!isAxiosError) {
+      return data;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    return [];
+  }
 
   //TODO: Please let @madhavanmalolan know what schema you want to respond with. For now only added ticketId, title and upvotes
 };
