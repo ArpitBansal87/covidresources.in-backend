@@ -67,9 +67,10 @@ module.exports.downvoteTicket = async function(ticketId) {
 };
 
 module.exports.createTicket = async function(
-
+    args
 ){
-  console.log("Create User stub");
+  const { state, city, pincode, address, supplierDonorName, supplierDonorContactNumber, resourceType, resourceName, costPerUnit, availableUnits} = args;
+  console.log("Create User stub", address);
   return { status: "200", message: "OK" };
 
 }
