@@ -27,8 +27,8 @@ const GraphQLTicket = new GraphQLObjectType({
 	name: 'Ticket',
 	description: 'Ticket',
 	fields: {
-		workspaceId: { 
-			type: GraphQLString,
+		ticketId: {
+			GraphQLString,
 		},
 		title : {
 			type: GraphQLString,

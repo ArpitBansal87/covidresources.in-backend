@@ -1,6 +1,11 @@
 module.exports.getTickets = async function() {
     console.log("getTickets")
-    return []
+    return [{
+        ticketId: "Sample Ticket Id",
+        title : "Sample title",
+        upvotes: 100,
+    }]
+    //TODO: Please let @madhavanmalolan know what schema you want to respond with. For now only added ticketId, title and upvotes
 }
 
 module.exports.updateTicket = async function(ticketId, key, value) {
