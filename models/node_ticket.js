@@ -29,8 +29,8 @@ const GraphQLTicket = new GraphQLObjectType({
 	fields: {
 		ticketId: {
 			GraphQLString,
+			title : {
 		},
-		title : {
 			type: GraphQLString,
 		},
 		upvotes: { 
