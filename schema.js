@@ -21,16 +21,17 @@ const {
 } =require('graphql-relay');
 
 const { UpdateTicketMutation, UpvoteTicketMutation, DownvoteTicketMutation } = require('./models/mutation_ticket');
+const { GraphQLWorkspace } = require('./models/node_workspace');
+const { getWorkspace } = require('./models/resolver');
 
 const GraphQLQueryRoot = new GraphQLObjectType({
 	name: 'QueryRoot', 
 	description: 'Every query must be made using the QueryRoot as the root',
 	fields: {
 		workspace: {
-			type: (() => require('./models/node_workspace').GraphQLWorkspace)(),
+			type: GraphQLWorkspace,
 			resolve: (source, args, context) => {
-				console.log(args);
-				return null
+				return getWorkspace();
 			}
 		}
 	}
