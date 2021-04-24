@@ -27,14 +27,45 @@ const GraphQLTicket = new GraphQLObjectType({
 	name: 'Ticket',
 	description: 'Ticket',
 	fields: {
+		id: globalIdField(),
 		ticketId: {
-			GraphQLString,
-			title : {
-		},
 			type: GraphQLString,
 		},
-		upvotes: { 
-			type: GraphQLInt
+		createdAt : {
+			type: GraphQLString,
+		},
+		state: { 
+			type: GraphQLString
+		},
+		city: { 
+			type: GraphQLString
+		},
+		pincode: { 
+			type: GraphQLString
+		},
+		address: { 
+			type: GraphQLString
+		},
+		supplierDonorName: { 
+			type: GraphQLString
+		},
+		supplierDonorContactNumber: { 
+			type: GraphQLString
+		},
+		resourceType: { 
+			type: GraphQLString
+		},
+		resourceName: { 
+			type: GraphQLString
+		},
+		costPerUnit: { 
+			type: GraphQLString
+		},
+		availableUnits: { 
+			type: GraphQLString
+		},
+		bloodGroup: { 
+			type: GraphQLString
 		},
 	}
 })

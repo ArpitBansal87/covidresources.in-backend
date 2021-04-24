@@ -21,7 +21,7 @@ const {
 		toGlobalId,
 } =require('graphql-relay');
 
-const {TicketsConnection} = require('./connection_tickets');
+const { TicketsConnection } = require('./connection_tickets');
 const { getTickets } = require('./resolver')
 
 
@@ -29,6 +29,7 @@ const GraphQLWorkspace = new GraphQLObjectType({
 	name: 'Workspace',
 	description: 'The workspace for all Ops',
 	fields: {
+		id: globalIdField(),
 		workspaceId: { 
 			type: GraphQLString,
 		},
@@ -36,9 +37,12 @@ const GraphQLWorkspace = new GraphQLObjectType({
 			type: TicketsConnection, 
 			description: "Tickets fetched from Freshdesk",
 			args: {
+				filter: { type: GraphQLString},
 				...connectionArgs
 			}, 
-			resolve: (source, { args }, context) => connectionFromPromisedArray(getTickets())
+			resolve: (source, { ...args }, context) => {
+				return connectionFromPromisedArray(getTickets(), args);
+			}
 		}
 	}
 })
