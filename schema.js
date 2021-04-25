@@ -20,7 +20,7 @@ const {
 		toGlobalId,
 } =require('graphql-relay');
 
-const { UpdateTicketMutation, UpvoteTicketMutation, DownvoteTicketMutation ,CreateTicketMutation } = require('./models/mutation_ticket');
+const { UpdateTicketMutation, ChangeVoteCountMutation, DownvoteTicketMutation ,CreateTicketMutation } = require('./models/mutation_ticket');
 const { GraphQLWorkspace } = require('./models/node_workspace');
 const { getWorkspace } = require('./models/resolver');
 
@@ -42,7 +42,7 @@ const GraphQLMutationRoot = new GraphQLObjectType({
 	name: 'MutationRoot', 
 	description: 'Every mutation must be made with MutationRoot as the root',
 	fields: {
-		upvoteTicket : UpvoteTicketMutation,
+		changeVoteCount : ChangeVoteCountMutation,
 		downvoteTicket : DownvoteTicketMutation,
 		updateTicket : UpdateTicketMutation,
 		createTicket : CreateTicketMutation
