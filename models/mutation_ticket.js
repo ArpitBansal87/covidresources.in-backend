@@ -20,7 +20,7 @@ const {
 	toGlobalId,
 } =require('graphql-relay');
 
-const { updateTicket, upvoteTicket, downvoteTicket, createTicket } = require('./resolver');
+const { updateTicket, changeVoteCount, downvoteTicket, createTicket } = require('./resolver');
 
 const UpdateTicketMutation = mutationWithClientMutationId({
     name: 'UpdateTicketMutation',
@@ -37,17 +37,18 @@ const UpdateTicketMutation = mutationWithClientMutationId({
     mutateAndGetPayload: ({ ticketId, key, value }) => updateTicket( ticketId, key, value )
 });
 
-const UpvoteTicketMutation = mutationWithClientMutationId({
-    name: 'UpvoteTicketMutation',
-    description: "Upvote a ticket in mutation",
+const ChangeVoteCountMutation = mutationWithClientMutationId({
+    name: 'ChangeVoteCountMutation',
+    description: "Change the Vote count of a ticket in mutation",
     inputFields : {
         ticketId: { type: GraphQLString },
+		value: { type: GraphQLString },
     },
     outputFields: {
         status : { type: GraphQLString },
         message: { type: GraphQLString }
     },
-    mutateAndGetPayload: ({ ticketId }) => upvoteTicket( ticketId )
+    mutateAndGetPayload: (args) => changeVoteCount( args )
 });
 
 const DownvoteTicketMutation = mutationWithClientMutationId({
@@ -100,17 +101,23 @@ const CreateTicketMutation = mutationWithClientMutationId({
 		bloodGroup: { 
 			type: GraphQLString
 		},
+		subResourceType: {
+			type: GraphQLString
+		},
+		otherInfo: {
+			type: GraphQLString
+		}
     },
     outputFields: {
         status : { type: GraphQLString },
         message: { type: GraphQLString }
     },
-    mutateAndGetPayload: (source, args, context) => createTicket( source, args, context )
+    mutateAndGetPayload: (args) => createTicket( args )
 });
 
 
 
 module.exports.UpdateTicketMutation = UpdateTicketMutation;
-module.exports.UpvoteTicketMutation = UpvoteTicketMutation;
+module.exports.ChangeVoteCountMutation = ChangeVoteCountMutation;
 module.exports.DownvoteTicketMutation = DownvoteTicketMutation;
 module.exports.CreateTicketMutation = CreateTicketMutation;

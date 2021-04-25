@@ -1,8 +1,8 @@
 const { default: axios } = require("axios");
 const { auth, URL, PATH, FILTER_PATH } = require("./constants");
 
-module.exports.makeRequest = async (method, url) => {
-  const options = {
+module.exports.makeRequest = async (method, url, fields) => {
+  let options = {
     method,
     url,
     headers: {
@@ -10,6 +10,12 @@ module.exports.makeRequest = async (method, url) => {
       Authorization: auth,
     },
   };
+  if (fields) {
+    options = {
+      ...options,
+      data: fields,
+    };
+  }
   let responseObj = {};
   try {
     responseObj = await axios(options);

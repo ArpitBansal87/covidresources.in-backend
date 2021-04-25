@@ -1,3 +1,4 @@
+const { URL, PATH } = require("./utils/constants");
 const {
   makeRequest,
   convertToResponseFormat,
@@ -51,9 +52,25 @@ module.exports.updateTicket = async function(ticketId, key, value) {
   return { status: "200", message: "OK" };
 };
 
-module.exports.upvoteTicket = async function(ticketId) {
-  console.log("upvoteTicket", ticketId);
-  return { status: "200", message: "OK" };
+module.exports.changeVoteCount = async function(args) {
+  const { ticketId, value } = args;
+  let returnObj = {};
+  try {
+    const urlString = `${URL}${PATH}/${ticketId}`;
+    const response = await makeRequest("PUT", urlString, {
+      custom_fields: {
+        cf_upvote_count: String(value),
+      },
+    });
+    returnObj = { status: "200", message: "OK" };
+  } catch (e) {
+    console.log(e);
+    returnObj = {
+      status: "500",
+      message: "Internal server error",
+    };
+  }
+  return returnObj;
 };
 
 module.exports.downvoteTicket = async function(ticketId) {
@@ -61,10 +78,51 @@ module.exports.downvoteTicket = async function(ticketId) {
   return { status: "200", message: "OK" };
 };
 
-module.exports.createTicket = async function(
-  args
-){
-const { state, city, pincode, address, supplierDonorName, supplierDonorContactNumber, resourceType, resourceName, costPerUnit, availableUnits} = args;
-console.log("Create User stub", address);
-return { status: "200", message: "OK" };
+module.exports.createTicket = async function(args) {
+  const {
+    state,
+    city,
+    pincode,
+    address,
+    supplierDonorName,
+    supplierDonorContactNumber,
+    resourceType,
+    subResourceType,
+    resourceName,
+    costPerUnit,
+    availableUnits,
+    otherInfo,
+  } = args;
+  try {
+    let createFields = {
+      phone: supplierDonorContactNumber,
+      name: supplierDonorName,
+      status: 2,
+      custom_fields: {
+        cf_state: state,
+        cf_city: city,
+        cf_resource_type: resourceType,
+        cf_sub_resource_type: subResourceType,
+        cf_upvote_count: "0",
+        cf_address: address,
+        cf_pincode: Number(pincode),
+        cf_supplierdonor_name: supplierDonorName,
+        cf_supplierdonor_contact_number: supplierDonorContactNumber,
+        cf_cost_per_unit: costPerUnit,
+        cf_available_units: availableUnits,
+        cf_other_info: otherInfo,
+      },
+    };
+    const urlString = `${URL}${PATH}`;
+    const response = await makeRequest("POST", urlString, createFields);
+    if(response.isAxiosError){
+      const errorObj = response.isAxiosError.response;
+      console.error(errorObj.data.errors);
+      return { status: "500", message: errorObj.data.description };
+    }
+    return { status: "200", message: "OK" };
+  } catch(e) {
+    console.log(e);
+    return { status: "500", message: "Internal server error" };
+  }
 };
