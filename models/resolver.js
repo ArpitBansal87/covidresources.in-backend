@@ -1,5 +1,5 @@
 const { URL } = require("./utils/constants");
-const { makeRequest } = require("./utils/utils");
+const { makeRequest, convertToResponseFormat } = require("./utils/utils");
 
 module.exports.getTickets = async function(source, args) {
   const { filter } = args;
@@ -7,7 +7,7 @@ module.exports.getTickets = async function(source, args) {
     const response = await makeRequest("GET", URL);
     const { data, isAxiosError } = response;
     if (!isAxiosError) {
-      return data;
+      return convertToResponseFormat(data);
     } else {
       return [];
     }
