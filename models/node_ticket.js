@@ -31,7 +31,7 @@ const GraphQLTicket = new GraphQLObjectType({
 		ticketId: {
 			type: GraphQLString,
 		},
-		createdAt : {
+		updatedAt : {
 			type: GraphQLString,
 		},
 		state: { 
@@ -67,6 +67,18 @@ const GraphQLTicket = new GraphQLObjectType({
 		bloodGroup: { 
 			type: GraphQLString
 		},
+		contactName: {
+			type: GraphQLString
+		},
+		upvoteCount: {
+			type: GraphQLString
+		},
+		otherInfo: {
+			type: GraphQLString
+		},
+		subResourceType: {
+			type: GraphQLString
+		}
 	}
 })
 

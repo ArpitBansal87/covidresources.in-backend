@@ -1,13 +1,20 @@
-const { URL } = require("./utils/constants");
-const { makeRequest, convertToResponseFormat } = require("./utils/utils");
+const {
+  makeRequest,
+  convertToResponseFormat,
+  getTicketsURL,
+} = require("./utils/utils");
 
-module.exports.getTickets = async function(source, args) {
+module.exports.getTickets = async function(
+  source,
+  args = { filter: undefined }
+) {
   const { filter } = args;
   try {
-    const response = await makeRequest("GET", URL);
+    const urlString = getTicketsURL(filter);
+    const response = await makeRequest("GET", urlString);
     const { data, isAxiosError } = response;
     if (!isAxiosError) {
-      return convertToResponseFormat(data);
+      return convertToResponseFormat(data.results);
     } else {
       return [];
     }
@@ -59,9 +66,9 @@ module.exports.downvoteTicket = async function(ticketId) {
 };
 
 module.exports.createTicket = async function(
-    args
+  args
 ){
-  const { state, city, pincode, address, supplierDonorName, supplierDonorContactNumber, resourceType, resourceName, costPerUnit, availableUnits} = args;
-  console.log("Create User stub", address);
-  return { status: "200", message: "OK" };
+const { state, city, pincode, address, supplierDonorName, supplierDonorContactNumber, resourceType, resourceName, costPerUnit, availableUnits} = args;
+console.log("Create User stub", address);
+return { status: "200", message: "OK" };
 };
