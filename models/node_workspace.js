@@ -40,8 +40,8 @@ const GraphQLWorkspace = new GraphQLObjectType({
 				filter: { type: GraphQLString},
 				...connectionArgs
 			}, 
-			resolve: (source, { ...args }, context) => {
-				return connectionFromPromisedArray(getTickets(args), args);
+			resolve: (source, { filter, ...args } ) => {
+				return connectionFromPromisedArray(getTickets(filter), args);
 			}
 		}
 	}

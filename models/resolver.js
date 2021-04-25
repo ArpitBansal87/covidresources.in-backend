@@ -4,11 +4,7 @@ const {
   getTicketsURL,
 } = require("./utils/utils");
 
-module.exports.getTickets = async function(
-  source,
-  args = { filter: undefined }
-) {
-  const { filter } = args;
+module.exports.getTickets = async function(filter) {
   try {
     const urlString = getTicketsURL(filter);
     const response = await makeRequest("GET", urlString);

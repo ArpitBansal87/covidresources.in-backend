@@ -4,7 +4,8 @@ const { graphqlHTTP } = require('express-graphql')
 const app = express()
 const { Schema } = require('./schema');
 var bodyParser = require('body-parser')
-
+const cors = require('cors')
+app.use(cors());
 app.use(bodyParser.json())
 
 
