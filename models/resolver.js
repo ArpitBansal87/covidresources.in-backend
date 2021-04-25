@@ -1,25 +1,17 @@
-const { default: axios } = require("axios");
-const { auth, URL } = require("./utils/constants");
+const { URL } = require("./utils/constants");
+const { makeRequest, convertToResponseFormat } = require("./utils/utils");
 
 module.exports.getTickets = async function(source, args) {
   const { filter } = args;
   try {
-    const response = await axios({
-      method: "GET",
-      url: URL,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: auth,
-      },
-    });
+    const response = await makeRequest("GET", URL);
     const { data, isAxiosError } = response;
     if (!isAxiosError) {
-      return data;
+      return convertToResponseFormat(data);
     } else {
       return [];
     }
   } catch (e) {
-      console.log(e);
     return [];
   }
 
@@ -46,10 +38,10 @@ module.exports.getTickets = async function(source, args) {
 */
 
 module.exports.getWorkspace = async function() {
-    return {
-        workspaceId: "singleton-workspace-covidresources",
-    }
-}
+  return {
+    workspaceId: "singleton-workspace-covidresources",
+  };
+};
 
 module.exports.updateTicket = async function(ticketId, key, value) {
   console.log("updateTicket", ticketId, key, value);
@@ -72,5 +64,4 @@ module.exports.createTicket = async function(
   const { state, city, pincode, address, supplierDonorName, supplierDonorContactNumber, resourceType, resourceName, costPerUnit, availableUnits} = args;
   console.log("Create User stub", address);
   return { status: "200", message: "OK" };
-
-}
+};
