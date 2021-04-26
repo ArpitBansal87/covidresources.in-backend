@@ -98,6 +98,8 @@ module.exports.createTicket = async function(args) {
       phone: supplierDonorContactNumber,
       name: supplierDonorName,
       status: 2,
+      subject: `${resourceType} ${city}`,
+      description: `<div>State: ${state}, <br> City: ${city} <br> Resource: ${resourceType} <br> Sub Resource: ${subResourceType} <br> Contact Name: ${supplierDonorName} <br> Contact Number: ${supplierDonorContactNumber} </div>`,
       custom_fields: {
         cf_state: state,
         cf_city: city,
@@ -115,13 +117,13 @@ module.exports.createTicket = async function(args) {
     };
     const urlString = `${URL}${PATH}`;
     const response = await makeRequest("POST", urlString, createFields);
-    if(response.isAxiosError){
+    if (response.isAxiosError) {
       const errorObj = response.isAxiosError.response;
       console.error(errorObj.data.errors);
       return { status: "500", message: errorObj.data.description };
     }
     return { status: "200", message: "OK" };
-  } catch(e) {
+  } catch (e) {
     console.log(e);
     return { status: "500", message: "Internal server error" };
   }
