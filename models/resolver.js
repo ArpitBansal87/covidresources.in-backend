@@ -9,14 +9,24 @@ const {TicketModel} = require('./models/ticket')
 
 module.exports.getTickets = async function(filter) {
   try {
-    const urlString = getTicketsURL(filter);
-    const response = await makeRequest("GET", urlString);
-    const { data, isAxiosError } = response;
-    if (!isAxiosError) {
-      return convertToResponseFormat(data.results);
-    } else {
-      return [];
-    }
+    // const urlString = getTicketsURL(filter);
+    // const response = await makeRequest("GET", urlString);
+    // const { data, isAxiosError } = response;
+    // if (!isAxiosError) {
+    //   return convertToResponseFormat(data.results);
+    // } else {
+    //   return [];
+    // }
+    const filterObj = filter ? {...filter, status: 4}: { status: 4};
+    // let responseObj = [];
+    TicketModel.find(filterObj).sort({updatedAt: -1}).exec(function(err, docs) {
+      console.log(`inside docs`);
+      console.log(docs);
+      if(err){
+        return [];
+      }
+      return docs;
+    });
   } catch (e) {
     return [];
   }
