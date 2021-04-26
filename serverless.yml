@@ -7,6 +7,14 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: ap-south-1
+  vpc:
+    securityGroupIds:
+      - sg-0e69b2fbc9942e38f
+      - sg-e9016a93
+    subnetIds:
+      - subnet-5effac12
+      - subnet-5ebcd925
+      - subnet-bbea07d0
 
 functions:
   app:
@@ -16,6 +24,7 @@ functions:
         cors: true 
       - http: 'ANY {proxy+}'
         cors: true 
+
 
 
 plugins:

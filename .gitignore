@@ -1,3 +1,4 @@
 node_modules/
 .serverless/
 models/utils/constants.js
+models/utils/keys.sh

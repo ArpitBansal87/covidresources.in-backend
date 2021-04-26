@@ -4,6 +4,8 @@ const {
   convertToResponseFormat,
   getTicketsURL,
 } = require("./utils/utils");
+const {TicketModel} = require('./models/ticket')
+
 
 module.exports.getTickets = async function(filter) {
   try {
