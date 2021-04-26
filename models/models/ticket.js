@@ -14,9 +14,10 @@ var TicketSchema = new Schema({
       resourceName: String,
       costPerUnit: String,
       availableUnits: Number,
-      upvoteCount: Number,
+      upvoteCount: { type: Number, default: 0 },
       otherInfo: String,
       subResourceType: String,
+      status: Number,   
 });
 
 module.exports.TicketModel = mongoose.model('TicketModel', TicketSchema );
