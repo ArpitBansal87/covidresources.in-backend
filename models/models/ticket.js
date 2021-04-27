@@ -10,13 +10,14 @@ var TicketSchema = new Schema({
       pincode: String,
       contactName: String,
       supplierDonorContactNumber: String,
-      resourceType: Number,
+      resourceType: String,
       resourceName: String,
       costPerUnit: String,
       availableUnits: Number,
-      upvoteCount: Number,
+      upvoteCount: { type: Number, default: 0 },
       otherInfo: String,
       subResourceType: String,
+      status: Number,   
 });
 
 module.exports.TicketModel = mongoose.model('TicketModel', TicketSchema );
