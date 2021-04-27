@@ -60,7 +60,9 @@ module.exports.getWorkspace = async function() {
 };
 
 module.exports.updateTicket = async function(ticketId, ticketObj) {
-  await TicketModel.updateOne({ ticketId }, ticketObj, { upsert: true }).exec()
+
+  //await TicketModel.findOneAndUpdate({ ticketId }, ticketObj, { upsert: true })
+  await (new TicketModel({ ticketObj })).save()
   return { status: "200", message: "OK" };
 };
 

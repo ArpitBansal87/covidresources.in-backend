@@ -10,7 +10,7 @@ var TicketSchema = new Schema({
       pincode: String,
       contactName: String,
       supplierDonorContactNumber: String,
-      resourceType: Number,
+      resourceType: String,
       resourceName: String,
       costPerUnit: String,
       availableUnits: Number,
