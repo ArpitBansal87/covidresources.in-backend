@@ -4,8 +4,7 @@ const {
   convertToResponseFormat,
   getTicketsURL,
 } = require("./utils/utils");
-const {TicketModel} = require('./models/ticket')
-
+const { TicketModel } = require("./models/ticket");
 
 module.exports.getTickets = async function(filter) {
   try {
@@ -17,16 +16,18 @@ module.exports.getTickets = async function(filter) {
     // } else {
     //   return [];
     // }
-    const filterObj = filter ? {...filter, status: 4}: { status: 4};
+    const filterObj = filter ? { ...filter, status: 4 } : { status: 4 };
     // let responseObj = [];
-    TicketModel.find(filterObj).sort({updatedAt: -1}).exec(function(err, docs) {
-      console.log(`inside docs`);
-      console.log(docs);
-      if(err){
-        return [];
-      }
-      return docs;
-    });
+    TicketModel.find(filterObj)
+      .sort({ updatedAt: -1 })
+      .exec(function(err, docs) {
+        console.log(`inside docs`);
+        console.log(docs);
+        if (err) {
+          return [];
+        }
+        return docs;
+      });
   } catch (e) {
     return [];
   }
@@ -66,30 +67,50 @@ module.exports.updateTicket = async function(ticketId, ticketObj) {
   return { status: "200", message: "OK" };
 };
 
-module.exports.changeVoteCount = async function(args) {
-  const { ticketId, value } = args;
-  let returnObj = {};
+module.exports.upVoteTicket = async function(args) {
+  // const { ticketId, value } = args;
+  // let returnObj = {};
+  // try {
+  //   const urlString = `${URL}${PATH}/${ticketId}`;
+  //   const response = await makeRequest("PUT", urlString, {
+  //     custom_fields: {
+  //       cf_upvote_count: String(value),
+  //     },
+  //   });
+  //   returnObj = { status: "200", message: "OK" };
+  // } catch (e) {
+  //   console.log(e);
+  //   returnObj = {
+  //     status: "500",
+  //     message: "Internal server error",
+  //   };
+  // }
   try {
-    const urlString = `${URL}${PATH}/${ticketId}`;
-    const response = await makeRequest("PUT", urlString, {
-      custom_fields: {
-        cf_upvote_count: String(value),
-      },
+    const filter = { ticketId: args.ticketId };
+    const updateValue = { $inc: { upvoteCount: 1 } };
+    TicketModel.updateOne(filter, updateValue, function(err, doc) {
+      if (err) return { status: "500", message: `Unable to update voteCount` };
+      else return { status: "200", message: `${doc.upvoteCount}` };
     });
-    returnObj = { status: "200", message: "OK" };
-  } catch (e) {
-    console.log(e);
-    returnObj = {
-      status: "500",
-      message: "Internal server error",
-    };
+  } catch(e) {
+    return {status: "500", message: `Internal server Err ${e}`};
   }
-  return returnObj;
+  // return returnObj;
 };
 
 module.exports.downvoteTicket = async function(ticketId) {
-  console.log("downvoteTicket", ticketId);
-  return { status: "200", message: "OK" };
+  // console.log("downvoteTicket", ticketId);
+  // return { status: "200", message: "OK" };
+  try {
+    const filter = { ticketId: args.ticketId };
+    const updateValue = { $inc: { upvoteCount: -1 } };
+    TicketModel.updateOne(filter, updateValue, function(err, doc) {
+      if (err) return { status: "500", message: `Unable to update voteCount` };
+      else return { status: "200", message: `${doc.upvoteCount}` };
+    });
+  } catch(e) {
+    return {status: "500", message: `Internal server Err ${e}`};
+  }
 };
 
 module.exports.createTicket = async function(args) {
