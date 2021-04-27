@@ -37,11 +37,13 @@ const GraphQLWorkspace = new GraphQLObjectType({
 			type: TicketsConnection, 
 			description: "Tickets fetched from Freshdesk",
 			args: {
-				filter: { type: GraphQLString},
+				state: { type: GraphQLString},
+				city: { type: GraphQLString},
+				resourceType: { type: GraphQLString},
 				...connectionArgs
 			}, 
-			resolve: (source, { filter, ...args } ) => {
-				return connectionFromPromisedArray(getTickets(filter), args);
+			resolve: (source, { state, city, resourceType, ...args } ) => {
+				return connectionFromPromisedArray(getTickets({state, city, resourceType}), args);
 			}
 		}
 	}
