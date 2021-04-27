@@ -71,7 +71,7 @@ const GraphQLTicket = new GraphQLObjectType({
 			type: GraphQLString
 		},
 		upvoteCount: {
-			type: GraphQLString
+			type: GraphQLInt
 		},
 		otherInfo: {
 			type: GraphQLString

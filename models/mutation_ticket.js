@@ -20,7 +20,7 @@ const {
 	toGlobalId,
 } =require('graphql-relay');
 
-const { updateTicket, upVoteTicket, downvoteTicket, createTicket } = require('./resolver');
+const { updateTicket, upvoteTicket, downvoteTicket, createTicket } = require('./resolver');
 
 const UpdateTicketMutation = mutationWithClientMutationId({
     name: 'UpdateTicketMutation',
@@ -42,13 +42,12 @@ const UpVoteTicketMutation = mutationWithClientMutationId({
     description: "Change the Vote count of a ticket in mutation",
     inputFields : {
         ticketId: { type: GraphQLString },
-		value: { type: GraphQLString },
     },
     outputFields: {
         status : { type: GraphQLString },
         message: { type: GraphQLString }
     },
-    mutateAndGetPayload: (args) => upVoteTicket( args )
+    mutateAndGetPayload: ({ticketId}) => upvoteTicket( ticketId )
 });
 
 const DownvoteTicketMutation = mutationWithClientMutationId({

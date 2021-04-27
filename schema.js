@@ -42,7 +42,7 @@ const GraphQLMutationRoot = new GraphQLObjectType({
 	name: 'MutationRoot', 
 	description: 'Every mutation must be made with MutationRoot as the root',
 	fields: {
-		upVoteTicket : UpVoteTicketMutation,
+		upvoteTicket : UpVoteTicketMutation,
 		downvoteTicket : DownvoteTicketMutation,
 		updateTicket : UpdateTicketMutation,
 		createTicket : CreateTicketMutation

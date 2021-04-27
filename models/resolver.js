@@ -16,7 +16,9 @@ module.exports.getTickets = async function(filter) {
     // } else {
     //   return [];
     // }
+    
     const filterObj = filter ? { ...filter, status: 4 } : { status: 4 };
+    //const filterObj = {};
     // let responseObj = [];
     const docs = TicketModel.find(filterObj).sort({updatedAt: -1}).exec();
     return docs;
@@ -59,7 +61,7 @@ module.exports.updateTicket = async function(ticketId, ticketObj) {
   return { status: "200", message: "OK" };
 };
 
-module.exports.upVoteTicket = async function(args) {
+module.exports.upvoteTicket = async function(ticketId) {
   // const { ticketId, value } = args;
   // let returnObj = {};
   // try {
@@ -78,31 +80,27 @@ module.exports.upVoteTicket = async function(args) {
   //   };
   // }
   try {
-    const filter = { ticketId: args.ticketId };
+    const filter = { ticketId };
     const updateValue = { $inc: { upvoteCount: 1 } };
-    TicketModel.updateOne(filter, updateValue, function(err, doc) {
-      if (err) return { status: "500", message: `Unable to update voteCount` };
-      else return { status: "200", message: `${doc.upvoteCount}` };
-    });
+    const response = await TicketModel.updateOne(filter, updateValue).exec();
   } catch(e) {
     return {status: "500", message: `Internal server Err ${e}`};
   }
-  // return returnObj;
+  return {status: "200", message: `OK`};
 };
 
 module.exports.downvoteTicket = async function(ticketId) {
   // console.log("downvoteTicket", ticketId);
   // return { status: "200", message: "OK" };
   try {
-    const filter = { ticketId: args.ticketId };
+    const filter = { ticketId: ticketId };
     const updateValue = { $inc: { upvoteCount: -1 } };
-    TicketModel.updateOne(filter, updateValue, function(err, doc) {
-      if (err) return { status: "500", message: `Unable to update voteCount` };
-      else return { status: "200", message: `${doc.upvoteCount}` };
-    });
+    await TicketModel.updateOne(filter, updateValue).exec()
   } catch(e) {
     return {status: "500", message: `Internal server Err ${e}`};
   }
+  return {status: "200", message: `OK`};
+
 };
 
 module.exports.createTicket = async function(args) {
