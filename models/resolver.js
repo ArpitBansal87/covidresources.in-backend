@@ -16,11 +16,18 @@ module.exports.getTickets = async function(filter) {
     // } else {
     //   return [];
     // }
-    
-    const filterObj = filter ? { ...filter, status: 4 } : { status: 4 };
-    //const filterObj = {};
-    // let responseObj = [];
-    const docs = TicketModel.find(filterObj).sort({updatedAt: -1}).exec();
+    const { state, city, resourceType } = filter;
+    const filterObj = filter
+      ? {
+          ...(state && { state }),
+          ...(city && { city }),
+          ...(resourceType && { resourceType }),
+          status: 4,
+        }
+      : { status: 4 };
+    const docs = TicketModel.find(filterObj)
+      .sort({ updatedAt: -1 })
+      .exec();
     return docs;
   } catch (e) {
     return [];
@@ -55,8 +62,7 @@ module.exports.getWorkspace = async function() {
 };
 
 module.exports.updateTicket = async function(ticketId, ticketObj) {
-
-  await TicketModel.findOneAndUpdate({ ticketId }, ticketObj, { upsert: true })
+  await TicketModel.findOneAndUpdate({ ticketId }, ticketObj, { upsert: true });
   //await (new TicketModel({ ticketObj })).save()
   return { status: "200", message: "OK" };
 };
@@ -83,10 +89,10 @@ module.exports.upvoteTicket = async function(ticketId) {
     const filter = { ticketId };
     const updateValue = { $inc: { upvoteCount: 1 } };
     const response = await TicketModel.updateOne(filter, updateValue).exec();
-  } catch(e) {
-    return {status: "500", message: `Internal server Err ${e}`};
+  } catch (e) {
+    return { status: "500", message: `Internal server Err ${e}` };
   }
-  return {status: "200", message: `OK`};
+  return { status: "200", message: `OK` };
 };
 
 module.exports.downvoteTicket = async function(ticketId) {
@@ -95,12 +101,11 @@ module.exports.downvoteTicket = async function(ticketId) {
   try {
     const filter = { ticketId: ticketId };
     const updateValue = { $inc: { upvoteCount: -1 } };
-    await TicketModel.updateOne(filter, updateValue).exec()
-  } catch(e) {
-    return {status: "500", message: `Internal server Err ${e}`};
+    await TicketModel.updateOne(filter, updateValue).exec();
+  } catch (e) {
+    return { status: "500", message: `Internal server Err ${e}` };
   }
-  return {status: "200", message: `OK`};
-
+  return { status: "200", message: `OK` };
 };
 
 module.exports.createTicket = async function(args) {
