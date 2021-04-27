@@ -18,16 +18,8 @@ module.exports.getTickets = async function(filter) {
     // }
     const filterObj = filter ? { ...filter, status: 4 } : { status: 4 };
     // let responseObj = [];
-    TicketModel.find(filterObj)
-      .sort({ updatedAt: -1 })
-      .exec(function(err, docs) {
-        console.log(`inside docs`);
-        console.log(docs);
-        if (err) {
-          return [];
-        }
-        return docs;
-      });
+    const docs = TicketModel.find(filterObj).sort({updatedAt: -1}).exec();
+    return docs;
   } catch (e) {
     return [];
   }
@@ -62,8 +54,8 @@ module.exports.getWorkspace = async function() {
 
 module.exports.updateTicket = async function(ticketId, ticketObj) {
 
-  //await TicketModel.findOneAndUpdate({ ticketId }, ticketObj, { upsert: true })
-  await (new TicketModel({ ticketObj })).save()
+  await TicketModel.findOneAndUpdate({ ticketId }, ticketObj, { upsert: true })
+  //await (new TicketModel({ ticketObj })).save()
   return { status: "200", message: "OK" };
 };
 

@@ -4,7 +4,8 @@ const { graphqlHTTP } = require('express-graphql')
 const app = express()
 const { Schema } = require('./schema');
 var bodyParser = require('body-parser');
-//const db = require('./models/utils/db');
+const db = require('./models/utils/db');
+const {TicketModel} = require('./models/models/ticket')
 
 const cors = require('cors')
 app.use(cors());
@@ -38,6 +39,10 @@ app.post('/freshdesk-hook', async function(req, res) {
     const otherInfo = req.body.custom_fields.cf_other_info;
     const subResourceType = req.body.custom_fields.cf_sub_resource_type;
     const status = req.body.triggered_event.match(/to:(\d+)/)[1];//JSON.parse(req.body.triggered_event).status.to;
+    /*return res.send(await (new TicketModel({
+      updatedAt, state, city, address, pincode, contactName, supplierDonorContactNumber, 
+      resourceType, costPerUnit, availableUnits, otherInfo, subResourceType, status 
+    })).save())*/
     await updateTicket(ticketId, { 
       updatedAt, state, city, address, pincode, contactName, supplierDonorContactNumber, 
       resourceType, costPerUnit, availableUnits, otherInfo, subResourceType, status 
