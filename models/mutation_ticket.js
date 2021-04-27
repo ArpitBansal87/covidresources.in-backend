@@ -20,7 +20,7 @@ const {
 	toGlobalId,
 } =require('graphql-relay');
 
-const { updateTicket, changeVoteCount, downvoteTicket, createTicket } = require('./resolver');
+const { updateTicket, upVoteTicket, downvoteTicket, createTicket } = require('./resolver');
 
 const UpdateTicketMutation = mutationWithClientMutationId({
     name: 'UpdateTicketMutation',
@@ -37,8 +37,8 @@ const UpdateTicketMutation = mutationWithClientMutationId({
     mutateAndGetPayload: ({ ticketId, key, value }) => updateTicket( ticketId, key, value )
 });
 
-const ChangeVoteCountMutation = mutationWithClientMutationId({
-    name: 'ChangeVoteCountMutation',
+const UpVoteTicketMutation = mutationWithClientMutationId({
+    name: 'UpVoteTicketMutation',
     description: "Change the Vote count of a ticket in mutation",
     inputFields : {
         ticketId: { type: GraphQLString },
@@ -48,7 +48,7 @@ const ChangeVoteCountMutation = mutationWithClientMutationId({
         status : { type: GraphQLString },
         message: { type: GraphQLString }
     },
-    mutateAndGetPayload: (args) => changeVoteCount( args )
+    mutateAndGetPayload: (args) => upVoteTicket( args )
 });
 
 const DownvoteTicketMutation = mutationWithClientMutationId({
@@ -118,6 +118,6 @@ const CreateTicketMutation = mutationWithClientMutationId({
 
 
 module.exports.UpdateTicketMutation = UpdateTicketMutation;
-module.exports.ChangeVoteCountMutation = ChangeVoteCountMutation;
+module.exports.UpVoteTicketMutation = UpVoteTicketMutation;
 module.exports.DownvoteTicketMutation = DownvoteTicketMutation;
 module.exports.CreateTicketMutation = CreateTicketMutation;
