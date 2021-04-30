@@ -8,14 +8,6 @@ const { TicketModel } = require("./models/ticket");
 
 module.exports.getTickets = async function(filter) {
   try {
-    // const urlString = getTicketsURL(filter);
-    // const response = await makeRequest("GET", urlString);
-    // const { data, isAxiosError } = response;
-    // if (!isAxiosError) {
-    //   return convertToResponseFormat(data.results);
-    // } else {
-    //   return [];
-    // }
     const { state, city, resourceType } = filter;
     const filterObj = filter
       ? {
@@ -26,8 +18,8 @@ module.exports.getTickets = async function(filter) {
         }
       : { status: 4 };
     const docs = TicketModel.find(filterObj)
-      .sort({ updatedAt: -1 })
-      .exec();
+    .sort({ updatedAt: -1 })
+    .exec();
     return docs;
   } catch (e) {
     return [];
@@ -35,25 +27,6 @@ module.exports.getTickets = async function(filter) {
 
   //TODO: Please let @madhavanmalolan know what schema you want to respond with. For now only added ticketId, title and upvotes
 };
-
-/*async function getTickets(source, args, context) {
-    return [{
-        ticketId: "Sample Ticket Id",
-        createdAt : "2021-04-23T18:38:58Z",
-        state: "Maharashtra",
-        city: "Mumbai",
-        pincode: "4000097",
-        address: "Malad East",
-        supplierDonorName: "Smit Shah",
-        supplierDonorContactNumber : "8097117927",
-        resourceType: "Medicines",
-        resourceName: "Remdesivir",
-        costPerUnit: "100",
-        availableUnits: "100"
-    }]
-    //TODO: Please let @madhavanmalolan know what schema you want to respond with. For now only added ticketId, title and upvotes
-}
-*/
 
 module.exports.getWorkspace = async function() {
   return {
@@ -63,28 +36,10 @@ module.exports.getWorkspace = async function() {
 
 module.exports.updateTicket = async function(ticketId, ticketObj) {
   await TicketModel.findOneAndUpdate({ ticketId }, ticketObj, { upsert: true });
-  //await (new TicketModel({ ticketObj })).save()
   return { status: "200", message: "OK" };
 };
 
 module.exports.upvoteTicket = async function(ticketId) {
-  // const { ticketId, value } = args;
-  // let returnObj = {};
-  // try {
-  //   const urlString = `${URL}${PATH}/${ticketId}`;
-  //   const response = await makeRequest("PUT", urlString, {
-  //     custom_fields: {
-  //       cf_upvote_count: String(value),
-  //     },
-  //   });
-  //   returnObj = { status: "200", message: "OK" };
-  // } catch (e) {
-  //   console.log(e);
-  //   returnObj = {
-  //     status: "500",
-  //     message: "Internal server error",
-  //   };
-  // }
   try {
     const filter = { ticketId };
     const updateValue = { $inc: { upvoteCount: 1 } };
@@ -96,8 +51,6 @@ module.exports.upvoteTicket = async function(ticketId) {
 };
 
 module.exports.downvoteTicket = async function(ticketId) {
-  // console.log("downvoteTicket", ticketId);
-  // return { status: "200", message: "OK" };
   try {
     const filter = { ticketId: ticketId };
     const updateValue = { $inc: { upvoteCount: -1 } };
@@ -125,10 +78,9 @@ module.exports.createTicket = async function(args) {
   } = args;
   try {
     let createFields = {
-      phone: supplierDonorContactNumber,
-      name: supplierDonorName,
+      email: "covidresourcesdotin@gmail.com",
       status: 2,
-      subject: `${resourceType} ${city}`,
+      subject: `${resourceType} in ${city}, ${state}`,
       description: `<div>State: ${state}, <br> City: ${city} <br> Resource: ${resourceType} <br> Sub Resource: ${subResourceType} <br> Contact Name: ${supplierDonorName} <br> Contact Number: ${supplierDonorContactNumber} </div>`,
       custom_fields: {
         cf_state: state,
@@ -145,6 +97,7 @@ module.exports.createTicket = async function(args) {
         cf_other_info: otherInfo,
       },
     };
+    // verified: 4, Open: 2, Pending/re-verified: 3, Closed/Dead: 5
     const urlString = `${URL}${PATH}`;
     const response = await makeRequest("POST", urlString, createFields);
     if (response.isAxiosError) {
@@ -152,6 +105,9 @@ module.exports.createTicket = async function(args) {
       console.error(errorObj.data.errors);
       return { status: "500", message: errorObj.data.description };
     }
+    // await TicketModel.create(arg).then(function(err, results) {
+    //   console.log("inside the response obj");
+    // });
     return { status: "200", message: "OK" };
   } catch (e) {
     console.log(e);
