@@ -75,13 +75,14 @@ module.exports.createTicket = async function(args) {
     costPerUnit,
     availableUnits,
     otherInfo,
+    secretKey,
   } = args;
   try {
     let createFields = {
       email: "covidresourcesdotin@gmail.com",
       status: 2,
       subject: `${resourceType} in ${city}, ${state}`,
-      description: `<div>State: ${state}, <br> City: ${city} <br> Resource: ${resourceType} <br> Sub Resource: ${subResourceType} <br> Contact Name: ${supplierDonorName} <br> Contact Number: ${supplierDonorContactNumber} </div>`,
+      description: `<div>State: ${state}, <br> City: ${city} <br> Resource: ${resourceType} <br> Sub Resource: ${subResourceType} <br> Contact Name: ${supplierDonorName} <br> Contact Number: ${supplierDonorContactNumber} <br> Other Info: ${otherInfo}</div>`,
       custom_fields: {
         cf_state: state,
         cf_city: city,
@@ -89,7 +90,6 @@ module.exports.createTicket = async function(args) {
         cf_sub_resource_type: subResourceType,
         cf_upvote_count: "0",
         cf_address: address,
-        cf_pincode: Number(pincode),
         cf_supplierdonor_name: supplierDonorName,
         cf_supplierdonor_contact_number: supplierDonorContactNumber,
         cf_cost_per_unit: costPerUnit,
@@ -98,6 +98,12 @@ module.exports.createTicket = async function(args) {
       },
     };
     // verified: 4, Open: 2, Pending/re-verified: 3, Closed/Dead: 5
+    if (secretKey !== undefined && secretKey === "KJlbvTHqK1Khi6mmNGC") {
+      createFields.status = 4;
+    } else if(secretKey !== "KJlbvTHqK1Khi6mmNGC" && secretKey.length !== 0) {
+      console.log('Incorrect secret key passed');
+      return { status: "500", message:"Incorrect secret key passed"};
+    }
     const urlString = `${URL}${PATH}`;
     const response = await makeRequest("POST", urlString, createFields);
     if (response.isAxiosError) {
@@ -105,8 +111,9 @@ module.exports.createTicket = async function(args) {
       console.error(errorObj.data.errors);
       return { status: "500", message: errorObj.data.description };
     }
-    // await TicketModel.create(arg).then(function(err, results) {
-    //   console.log("inside the response obj");
+    console.log(createFields);
+    // await TicketModel.create(createFields).then(function(err, results) {
+    //   console.log("inside the response obj");      
     // });
     return { status: "200", message: "OK" };
   } catch (e) {

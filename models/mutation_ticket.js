@@ -105,6 +105,9 @@ const CreateTicketMutation = mutationWithClientMutationId({
 		},
 		otherInfo: {
 			type: GraphQLString
+		},
+		secretKey: {
+			type: GraphQLString
 		}
     },
     outputFields: {
