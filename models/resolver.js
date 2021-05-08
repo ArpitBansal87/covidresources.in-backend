@@ -100,7 +100,7 @@ module.exports.createTicket = async function(args) {
     // verified: 4, Open: 2, Pending/re-verified: 3, Closed/Dead: 5
     if (secretKey !== undefined && secretKey === "KJlbvTHqK1Khi6mmNGC") {
       createFields.status = 4;
-    } else if(secretKey !== "KJlbvTHqK1Khi6mmNGC" && secretKey.length !== 0) {
+    } else if(secretKey && secretKey !== "KJlbvTHqK1Khi6mmNGC" && secretKey.length !== 0) {
       console.log('Incorrect secret key passed');
       return { status: "500", message:"Incorrect secret key passed"};
     }

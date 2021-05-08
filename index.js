@@ -60,6 +60,7 @@ Last Verified @ ${dateValue.getDate()}/${Number(dateValue.getMonth()) + 1}/${dat
 
 app.post("/freshdesk-hook", async function(req, res) {
   try {
+    console.log(req.body.custom_fields);
     const ticketId = req.body.id;
     const updatedAt = Date.now();
     const state = req.body.custom_fields.cf_state;
@@ -74,12 +75,33 @@ app.post("/freshdesk-hook", async function(req, res) {
     const availableUnits = req.body.custom_fields.cf_available_units;
     const otherInfo = req.body.custom_fields.cf_other_info;
     const subResourceType = req.body.custom_fields.cf_sub_resource_type;
-    const status = req.body.triggered_event.match(/to:(\d+)/)[1]; //JSON.parse(req.body.triggered_event).status.to;
+    let status = 2;
+    switch (req.body.custom_fields.cf_status) {
+      case "Open":
+        status = 2;
+        break;
+      case "Pending":
+      case "Needs Re-verification":
+        status = 3;
+        break;
+      case "Resolved":
+      case "Verified":
+        status = 4;
+        break;
+      case "Closed":
+      case "Expired Resource":
+        status = 5;
+        break;
+      case "On-hold":
+        status = 6;
+        break;
+    }
+    //JSON.parse(req.body.triggered_event).status.to;
     /*return res.send(await (new TicketModel({
       updatedAt, state, city, address, pincode, contactName, supplierDonorContactNumber, 
       resourceType, costPerUnit, availableUnits, otherInfo, subResourceType, status 
     })).save())*/
-    await updateTicket(ticketId, {
+    const uploadData = {
       updatedAt,
       state,
       city,
@@ -93,7 +115,14 @@ app.post("/freshdesk-hook", async function(req, res) {
       otherInfo,
       subResourceType,
       status,
-    });
+    };
+    await updateTicket(ticketId, uploadData)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     res.send("ok");
   } catch (e) {
     console.log(e);
