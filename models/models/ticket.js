@@ -13,7 +13,7 @@ var TicketSchema = new Schema({
       resourceType: String,
       resourceName: String,
       costPerUnit: String,
-      availableUnits: Number,
+      availableUnits: String,
       upvoteCount: { type: Number, default: 0 },
       otherInfo: String,
       subResourceType: String,
